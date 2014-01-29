@@ -1,0 +1,79 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ --> 
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>jQuery Powered Google Calendar Feed Retriever and Parser</title>
+  <meta name="description" content="">
+  <meta name="author" content="Kyle Smith">
+  
+</head>
+<body>
+   <!-- <link rel="stylesheet" type="text/css" href="css/curStuCal.css" /> -->
+
+   <ul id="CurStuCal" class="feed-wrapper"></ul>
+   
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+   <script src="js/jgcal.jquery.min.js"></script>
+   <script>
+      $(document).ready(function() {
+         $("#CurStuCal").jgcal(
+         {
+            feeds:
+            [
+               "http://www.google.com/calendar/feeds/7bbvdh7nfmpq2sd373hocgm2k0%40group.calendar.google.com/public/full",
+               {
+                  url: "https://www.google.com/calendar/feeds/knksmith57%40gmail.com/public/full", 
+                  group: "cal-Kyle",
+               }, 
+               {
+                  url: "http://www.google.com/calendar/feeds/rpmg5ifsen7ltjrvbrev4mvqco%40group.calendar.google.com/public/full", 
+                  group: "studentEvents"
+               }
+            ]
+         },
+         {
+            feedTemp: function(props, helper) {
+               var html = "<li class=\"" + props["group"] + "\">\n" +
+                  "<div class=\"outerCal\"><br />\n" + 
+                     "<div class=\"innerCal\">\n" +
+                        "<span class=\"event-month\">" + props["month"] + "</span>\n" +
+                        "<span class=\"event-date\">" + props["date"] + "</span>\n" +
+                     "</div>\n" +
+                     "<span class=\"event-day\">" + props["day"] + "</span>\n" +
+                  "</div>\n" +
+                  "<div class=\"eventInfo\">" +
+                     "<span class=\"event-title\">" + props["title"] + "</span><br />\n";
+                
+               if(props.mde) {
+                  html+= "<span class=\"event-dateString\">" + props["dateString"] + "</span><br />\n";
+               }
+               if(props.time) {     
+                  html+= "<span class=\"event-time\">" + props["time"] + "</span><br />\n"; 
+               }
+               if(props.location) {     
+                  html+= "<span class=\"event-location\">" + props["location"] + "</span>\n"; 
+               }
+               if(props.details) {     
+                  html+= "<span class=\"event-details\">" + props["details"] + "</span>\n"; 
+               }
+                  
+               return html+= "</div>\n</li>\n";
+            }
+         }, function(events) {
+               console.log(events); 
+         });
+      });
+   </script>
+</body>
+</html>
+
